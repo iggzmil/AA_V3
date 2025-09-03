@@ -57,10 +57,11 @@ function createContactEmailHtml($formData) {
         <style>
             body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
             .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background-color: #0066cc; color: white; padding: 10px 20px; text-align: center; }
+            .header { background-color: #db2d2e; color: white; padding: 10px 20px; text-align: center; }
             .content { padding: 20px; background-color: #f9f9f9; }
             .field { margin-bottom: 15px; }
-            .label { font-weight: bold; }
+            .label { font-weight: bold; color: #333; }
+            .value { color: #333; margin: 0; }
             .footer { font-size: 12px; text-align: center; margin-top: 20px; color: #666; }
         </style>
     </head>
@@ -72,31 +73,31 @@ function createContactEmailHtml($formData) {
             <div class="content">
                 <div class="field">
                     <p class="label">Name:</p>
-                    <p>' . $name . '</p>
+                    <p class="value">' . $name . '</p>
                 </div>
                 <div class="field">
                     <p class="label">Email:</p>
-                    <p>' . $email . '</p>
+                    <p class="value">' . $email . '</p>
                 </div>
                 <div class="field">
                     <p class="label">Phone:</p>
-                    <p>' . $phone . '</p>
+                    <p class="value">' . $phone . '</p>
                 </div>
                 <div class="field">
                     <p class="label">Car Make:</p>
-                    <p>' . $carMake . '</p>
+                    <p class="value">' . $carMake . '</p>
                 </div>
                 <div class="field">
                     <p class="label">Car Model:</p>
-                    <p>' . $carModel . '</p>
+                    <p class="value">' . $carModel . '</p>
                 </div>
                 <div class="field">
                     <p class="label">Year of Manufacture:</p>
-                    <p>' . $year . '</p>
+                    <p class="value">' . $year . '</p>
                 </div>
                 <div class="field">
                     <p class="label">Message:</p>
-                    <p>' . $message . '</p>
+                    <p class="value">' . $message . '</p>
                 </div>
             </div>
             <div class="footer">

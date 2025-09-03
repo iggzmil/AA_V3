@@ -578,6 +578,9 @@ AAACITY.autoAcousticsContactForm = function () {
                 name: $('#contactform_name').val(),
                 email: $('#contactform_email').val(),
                 phone: $('#contactform_phone').val(),
+                car_make: $('#contactform_car_make').val(),
+                car_model: $('#contactform_car_model').val(),
+                year: $('#contactform_year').val(),
                 message: $('#contactform_message').val()
             };
             
