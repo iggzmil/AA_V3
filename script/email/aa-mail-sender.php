@@ -41,6 +41,9 @@ function createContactEmailHtml($formData) {
     $name = isset($formData['name']) ? htmlspecialchars($formData['name']) : 'Not provided';
     $email = isset($formData['email']) ? htmlspecialchars($formData['email']) : 'Not provided';
     $phone = isset($formData['phone']) ? htmlspecialchars($formData['phone']) : 'Not provided';
+    $carMake = isset($formData['car_make']) ? htmlspecialchars($formData['car_make']) : 'Not provided';
+    $carModel = isset($formData['car_model']) ? htmlspecialchars($formData['car_model']) : 'Not provided';
+    $year = isset($formData['year']) ? htmlspecialchars($formData['year']) : 'Not provided';
     $message = isset($formData['message']) ? nl2br(htmlspecialchars($formData['message'])) : 'Not provided';
     
     // Create HTML email content
@@ -78,6 +81,18 @@ function createContactEmailHtml($formData) {
                 <div class="field">
                     <p class="label">Phone:</p>
                     <p>' . $phone . '</p>
+                </div>
+                <div class="field">
+                    <p class="label">Car Make:</p>
+                    <p>' . $carMake . '</p>
+                </div>
+                <div class="field">
+                    <p class="label">Car Model:</p>
+                    <p>' . $carModel . '</p>
+                </div>
+                <div class="field">
+                    <p class="label">Year of Manufacture:</p>
+                    <p>' . $year . '</p>
                 </div>
                 <div class="field">
                     <p class="label">Message:</p>

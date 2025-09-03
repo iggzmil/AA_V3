@@ -2681,6 +2681,7 @@ form.gray-form .form-notice p {
   border: 1px solid #e3e3e3;
   padding: 25px;
   background: transparent;
+  color: var(--cd-tertiary-color);
 }
 .accordion .accordion-button::after{
   background-image: inherit;

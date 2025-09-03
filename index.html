@@ -937,7 +937,7 @@
           </h2>
           <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
             <div class="accordion-body">
-              <p class="mb-0">You can send an email to <b>autoacoustics@gmail.com</b>, use the contact form through our website, call us directly, or visit our workshop in St Peters. We’re happy to chat, answer questions, and help you plan the perfect setup for your ride.</p>
+              <p class="mb-0">You can send an email to <span class="text-black">autoacoustics@gmail.com</span>, use the contact form below, call us directly on <span class="text-black">1300 364 404</span>, or visit our workshop in St Peters. We’re happy to chat, answer any questions, and help you plan the perfect setup for your ride.</p>
             </div>
           </div>
         </div>
@@ -1138,7 +1138,8 @@
 			      <form class="form-horizontal" id="contactform" role="form" method="post" action="">
               <h5>Trusted by Hundreds. Proven in Thousands.</h5>
               <p>With over 1,000 projects delivered we bring experience and craftsmanship to every installation.</p>
-              <p>Got a question or a custom job in mind? We’d love to hear from you!</p>
+              <p><span class="text-black">Got a question or a custom job in mind? We’d love to hear from you!</span></p>
+              
 			        <div id="formmessage" class="form-notice" style="display:none;">Success/Error Message Goes Here</div>
               <div class="contact-form">
                 <div class="mb-3">
@@ -1153,6 +1154,17 @@
                 <div class="mb-3">
                   <textarea id="contactform_message" class="form-control input-message" placeholder="Comment*" rows="7" name="message" aria-label="Your message or inquiry" required></textarea>
                 </div>
+                <p><span class="text-black">For a quicker and more relevant response, please include your car's details.</span></p>
+                <div class="mb-3">
+                  <input id="contactform_car_make" type="text" placeholder="Car Make (e.g., Honda, Ford)" class="form-control" name="car_make" aria-label="Your car make">
+                </div>
+                <div class="mb-3">
+                  <input id="contactform_car_model" type="text" placeholder="Car Model (e.g., Civic, F-150)" class="form-control" name="car_model" aria-label="Your car model">
+                </div>
+                <div class="mb-3">
+                  <input id="contactform_year" type="text" placeholder="Year of Manufacture (e.g., 2023)" class="form-control" name="year" aria-label="Year of manufacture">
+                </div>
+                
                 <div class="d-grid">
                   <input type="hidden" name="action" value="sendEmail"/>
                   <button id="submit" name="submit" type="submit" value="Send" class="button red btn-block" aria-label="Send your message to Auto Acoustics"> Send your message <i class="fa fa-spinner fa-spin fa-fw btn-loader" style="display: none;"></i></button>
