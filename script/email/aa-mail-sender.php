@@ -30,7 +30,6 @@ if (!$autoloaderLoaded) {
 
 // Load environment variables if Composer autoloader was loaded
 if ($autoloaderLoaded && class_exists('Dotenv\Dotenv')) {
-    use Dotenv\Dotenv;
     
     // Try different paths for .env file
     $envPaths = [
@@ -41,7 +40,7 @@ if ($autoloaderLoaded && class_exists('Dotenv\Dotenv')) {
     
     foreach ($envPaths as $envPath) {
         if (file_exists($envPath . '.env')) {
-            $dotenv = Dotenv::createImmutable($envPath);
+            $dotenv = \Dotenv\Dotenv::createImmutable($envPath);
             $dotenv->load();
             $dotenv->required(['SMTP_HOST', 'SMTP_PORT', 'SMTP_USERNAME', 'SMTP_PASSWORD', 'SMTP_ENCRYPTION']);
             break;
