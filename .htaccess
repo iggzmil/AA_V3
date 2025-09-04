@@ -22,17 +22,31 @@
 
 # Additional Security Measures
 
-# Prevent access to sensitive files
+# CRITICAL: Block access to .env file (contains passwords!)
+<Files ".env">
+    <RequireAll>
+        Require all denied
+    </RequireAll>
+</Files>
+
+<Files "*.env">
+    <RequireAll>
+        Require all denied
+    </RequireAll>
+</Files>
+
+# Block access to sensitive files (multiple syntax for compatibility)
+<FilesMatch "\.(htaccess|htpasswd|ini|log|sh|inc|bak|env)$">
+    <RequireAll>
+        Require all denied
+    </RequireAll>
+</FilesMatch>
+
+# Legacy Apache 2.2 syntax (backup protection)
 <FilesMatch "\.(htaccess|htpasswd|ini|log|sh|inc|bak|env)$">
     Order Allow,Deny
     Deny from all
 </FilesMatch>
-
-# Protect .env file specifically (critical for our new setup)
-<Files ".env">
-    Order Allow,Deny
-    Deny from all
-</Files>
 
 # Prevent directory browsing
 Options -Indexes
