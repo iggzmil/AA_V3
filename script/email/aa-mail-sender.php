@@ -5,12 +5,24 @@
  * Uses PHPMailer to send emails through the Auto Acoustics SMTP server
  */
 
-// Define constants for email configuration
-define('AA_SMTP_HOST', 'mail.aaa-city.com');
-define('AA_SMTP_PORT', 587);
-define('AA_SMTP_USERNAME', 'smtpmailer@aaa-city.com');
-define('AA_SMTP_PASSWORD', 'Aut0SMTPMa1l3r');
-define('AA_SMTP_ENCRYPTION', 'tls'); // STARTTLS
+// Load environment variables
+require_once __DIR__ . '/../../vendor/autoload.php';
+
+use Dotenv\Dotenv;
+
+// Load .env file from project root
+$dotenv = Dotenv::createImmutable(__DIR__ . '/../../');
+$dotenv->load();
+
+// Validate required environment variables
+$dotenv->required(['SMTP_HOST', 'SMTP_PORT', 'SMTP_USERNAME', 'SMTP_PASSWORD', 'SMTP_ENCRYPTION']);
+
+// Define constants for email configuration from environment variables
+define('AA_SMTP_HOST', $_ENV['SMTP_HOST']);
+define('AA_SMTP_PORT', (int)$_ENV['SMTP_PORT']);
+define('AA_SMTP_USERNAME', $_ENV['SMTP_USERNAME']);
+define('AA_SMTP_PASSWORD', $_ENV['SMTP_PASSWORD']);
+define('AA_SMTP_ENCRYPTION', $_ENV['SMTP_ENCRYPTION']);
 
 // Check if PHPMailer is already included
 if (!class_exists('PHPMailer\PHPMailer\PHPMailer')) {
