@@ -7,7 +7,22 @@
  */
 
 // Load Composer autoloader first - this is critical for PHPMailer classes
-require_once __DIR__ . '/../../vendor/autoload.php';
+$autoloaderPath = __DIR__ . '/../../vendor/autoload.php';
+if (!file_exists($autoloaderPath)) {
+    die("Autoloader not found at: " . $autoloaderPath);
+}
+
+require_once $autoloaderPath;
+
+// Verify PHPMailer class is available
+if (!class_exists('PHPMailer\PHPMailer\PHPMailer')) {
+    die("PHPMailer class not found after loading autoloader");
+}
+
+// Add the PHPMailer use statements here to ensure they're available
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\SMTP;
 
 // Include the AA mail sender
 require_once __DIR__ . '/aa-mail-sender.php';
