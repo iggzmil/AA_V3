@@ -5,37 +5,62 @@
  * Uses PHPMailer to send emails through the Auto Acoustics SMTP server
  */
 
-// Load environment variables
-require_once __DIR__ . '/../../vendor/autoload.php';
+// Load dependencies and environment variables
+$autoloaderPaths = [
+    __DIR__ . '/../../vendor/autoload.php',  // Standard Composer location
+    __DIR__ . '/../../../vendor/autoload.php', // Alternative location
+    __DIR__ . '/../../../../vendor/autoload.php', // Root level
+];
 
-use Dotenv\Dotenv;
-
-// Load .env file from project root
-$dotenv = Dotenv::createImmutable(__DIR__ . '/../../');
-$dotenv->load();
-
-// Validate required environment variables
-$dotenv->required(['SMTP_HOST', 'SMTP_PORT', 'SMTP_USERNAME', 'SMTP_PASSWORD', 'SMTP_ENCRYPTION']);
-
-// Define constants for email configuration from environment variables
-define('AA_SMTP_HOST', $_ENV['SMTP_HOST']);
-define('AA_SMTP_PORT', (int)$_ENV['SMTP_PORT']);
-define('AA_SMTP_USERNAME', $_ENV['SMTP_USERNAME']);
-define('AA_SMTP_PASSWORD', $_ENV['SMTP_PASSWORD']);
-define('AA_SMTP_ENCRYPTION', $_ENV['SMTP_ENCRYPTION']);
-
-// Check if PHPMailer is already included
-if (!class_exists('PHPMailer\PHPMailer\PHPMailer')) {
-    // If PHPMailer is not available, include the PHPMailer class via composer autoload
-    // or directly include the PHPMailer files
-    if (file_exists(__DIR__ . '/../../vendor/autoload.php')) {
-        require_once __DIR__ . '/../../vendor/autoload.php';
-    } else {
-        // If no composer autoload, include PHPMailer classes directly
-        require_once __DIR__ . '/PHPMailer/Exception.php';
-        require_once __DIR__ . '/PHPMailer/PHPMailer.php';
-        require_once __DIR__ . '/PHPMailer/SMTP.php';
+$autoloaderLoaded = false;
+foreach ($autoloaderPaths as $autoloaderPath) {
+    if (file_exists($autoloaderPath)) {
+        require_once $autoloaderPath;
+        $autoloaderLoaded = true;
+        break;
     }
+}
+
+// If no Composer autoloader found, load PHPMailer classes directly
+if (!$autoloaderLoaded) {
+    require_once __DIR__ . '/PHPMailer/Exception.php';
+    require_once __DIR__ . '/PHPMailer/PHPMailer.php';
+    require_once __DIR__ . '/PHPMailer/SMTP.php';
+}
+
+// Load environment variables if Composer autoloader was loaded
+if ($autoloaderLoaded && class_exists('Dotenv\Dotenv')) {
+    use Dotenv\Dotenv;
+    
+    // Try different paths for .env file
+    $envPaths = [
+        __DIR__ . '/../../',        // Standard location
+        __DIR__ . '/../../../',     // Alternative location  
+        __DIR__ . '/../../../../',  // Root level
+    ];
+    
+    foreach ($envPaths as $envPath) {
+        if (file_exists($envPath . '.env')) {
+            $dotenv = Dotenv::createImmutable($envPath);
+            $dotenv->load();
+            $dotenv->required(['SMTP_HOST', 'SMTP_PORT', 'SMTP_USERNAME', 'SMTP_PASSWORD', 'SMTP_ENCRYPTION']);
+            break;
+        }
+    }
+    
+    // Define constants from environment variables
+    define('AA_SMTP_HOST', $_ENV['SMTP_HOST']);
+    define('AA_SMTP_PORT', (int)$_ENV['SMTP_PORT']);
+    define('AA_SMTP_USERNAME', $_ENV['SMTP_USERNAME']);
+    define('AA_SMTP_PASSWORD', $_ENV['SMTP_PASSWORD']);
+    define('AA_SMTP_ENCRYPTION', $_ENV['SMTP_ENCRYPTION']);
+} else {
+    // Fallback: Load from server environment variables or use defaults
+    define('AA_SMTP_HOST', $_ENV['SMTP_HOST'] ?? getenv('SMTP_HOST') ?? 'mail.aaa-city.com');
+    define('AA_SMTP_PORT', (int)($_ENV['SMTP_PORT'] ?? getenv('SMTP_PORT') ?? 587));
+    define('AA_SMTP_USERNAME', $_ENV['SMTP_USERNAME'] ?? getenv('SMTP_USERNAME') ?? 'smtpmailer@aaa-city.com');
+    define('AA_SMTP_PASSWORD', $_ENV['SMTP_PASSWORD'] ?? getenv('SMTP_PASSWORD') ?? 'Password4SMTPMailer');
+    define('AA_SMTP_ENCRYPTION', $_ENV['SMTP_ENCRYPTION'] ?? getenv('SMTP_ENCRYPTION') ?? 'tls');
 }
 
 use PHPMailer\PHPMailer\PHPMailer;
