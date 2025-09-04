@@ -28,16 +28,6 @@ if (!$autoloaderLoaded) {
     require_once __DIR__ . '/PHPMailer/SMTP.php';
 }
 
-// DEBUG: Let's see what's happening
-$debugInfo = [
-    'autoloader_loaded' => $autoloaderLoaded,
-    'dotenv_class_exists' => class_exists('Dotenv\Dotenv'),
-    'current_dir' => __DIR__,
-    'checked_paths' => [],
-    'env_file_found' => false,
-    'env_file_path' => null
-];
-
 // Load environment variables if Composer autoloader was loaded
 if ($autoloaderLoaded && class_exists('Dotenv\Dotenv')) {
     
@@ -49,43 +39,25 @@ if ($autoloaderLoaded && class_exists('Dotenv\Dotenv')) {
     ];
     
     foreach ($envPaths as $envPath) {
-        $fullEnvPath = $envPath . '.env';
-        $debugInfo['checked_paths'][] = $fullEnvPath;
-        
-        if (file_exists($fullEnvPath)) {
-            $debugInfo['env_file_found'] = true;
-            $debugInfo['env_file_path'] = $fullEnvPath;
-            
+        if (file_exists($envPath . '.env')) {
             try {
                 $dotenv = \Dotenv\Dotenv::createImmutable($envPath);
                 $dotenv->load();
                 $dotenv->required(['SMTP_HOST', 'SMTP_PORT', 'SMTP_USERNAME', 'SMTP_PASSWORD', 'SMTP_ENCRYPTION']);
-                $debugInfo['env_loaded'] = true;
                 break;
             } catch (Exception $e) {
-                $debugInfo['env_error'] = $e->getMessage();
+                // Continue to next path if this one fails
+                continue;
             }
         }
     }
     
-    // Define constants from environment variables if loaded
-    if (isset($_ENV['SMTP_HOST'])) {
-        define('AA_SMTP_HOST', $_ENV['SMTP_HOST']);
-        define('AA_SMTP_PORT', (int)$_ENV['SMTP_PORT']);
-        define('AA_SMTP_USERNAME', $_ENV['SMTP_USERNAME']);
-        define('AA_SMTP_PASSWORD', $_ENV['SMTP_PASSWORD']);
-        define('AA_SMTP_ENCRYPTION', $_ENV['SMTP_ENCRYPTION']);
-        $debugInfo['using_env_vars'] = true;
-    } else {
-        // Fallback to defaults
-        define('AA_SMTP_HOST', 'mail.aaa-city.com');
-        define('AA_SMTP_PORT', 587);
-        define('AA_SMTP_USERNAME', 'smtpmailer@aaa-city.com');
-        define('AA_SMTP_PASSWORD', 'Password4SMTPMailer');
-        define('AA_SMTP_ENCRYPTION', 'tls');
-        $debugInfo['using_env_vars'] = false;
-        $debugInfo['fallback_reason'] = 'ENV vars not set';
-    }
+    // Define constants from environment variables
+    define('AA_SMTP_HOST', $_ENV['SMTP_HOST']);
+    define('AA_SMTP_PORT', (int)$_ENV['SMTP_PORT']);
+    define('AA_SMTP_USERNAME', $_ENV['SMTP_USERNAME']);
+    define('AA_SMTP_PASSWORD', $_ENV['SMTP_PASSWORD']);
+    define('AA_SMTP_ENCRYPTION', $_ENV['SMTP_ENCRYPTION']);
 } else {
     // Fallback: Load from server environment variables or use defaults
     define('AA_SMTP_HOST', $_ENV['SMTP_HOST'] ?? getenv('SMTP_HOST') ?? 'mail.aaa-city.com');
@@ -93,15 +65,6 @@ if ($autoloaderLoaded && class_exists('Dotenv\Dotenv')) {
     define('AA_SMTP_USERNAME', $_ENV['SMTP_USERNAME'] ?? getenv('SMTP_USERNAME') ?? 'smtpmailer@aaa-city.com');
     define('AA_SMTP_PASSWORD', $_ENV['SMTP_PASSWORD'] ?? getenv('SMTP_PASSWORD') ?? 'Password4SMTPMailer');
     define('AA_SMTP_ENCRYPTION', $_ENV['SMTP_ENCRYPTION'] ?? getenv('SMTP_ENCRYPTION') ?? 'tls');
-    $debugInfo['using_env_vars'] = false;
-    $debugInfo['fallback_reason'] = $autoloaderLoaded ? 'Dotenv class not found' : 'Autoloader not found';
-}
-
-// TEMPORARY DEBUG: Output debug info (remove this after debugging)
-if (isset($_GET['debug']) || (isset($_POST['debug']) && $_POST['debug'] === 'true')) {
-    header('Content-Type: application/json');
-    echo json_encode($debugInfo, JSON_PRETTY_PRINT);
-    exit;
 }
 
 use PHPMailer\PHPMailer\PHPMailer;
