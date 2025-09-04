@@ -3,6 +3,9 @@
  * Security Headers Test Tool
  * Displays the HTTP headers being sent by the server
  */
+
+// Apply security headers (for Nginx)
+include 'security-headers.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
