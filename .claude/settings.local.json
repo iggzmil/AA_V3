@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(php:*)"
+      "Bash(php:*)",
+      "Read(/C:\\WebDev\\AA\\V3\\Dev\\script\\email/**)"
     ],
     "deny": [],
     "ask": []
