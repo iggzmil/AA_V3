@@ -5,31 +5,34 @@
  * Uses PHPMailer to send emails through the Auto Acoustics SMTP server
  */
 
-// Load dependencies and environment variables
-$autoloaderPaths = [
-    __DIR__ . '/../../vendor/autoload.php',  // Standard Composer location
-    __DIR__ . '/../../../vendor/autoload.php', // Alternative location
-    __DIR__ . '/../../../../vendor/autoload.php', // Root level
-];
-
-$autoloaderLoaded = false;
-foreach ($autoloaderPaths as $autoloaderPath) {
-    if (file_exists($autoloaderPath)) {
-        require_once $autoloaderPath;
-        $autoloaderLoaded = true;
-        break;
+// Check if autoloader was already loaded (it should be by aa-contact-form-handler.php)
+// If not, try to load it (for standalone usage)
+if (!class_exists('Dotenv\Dotenv')) {
+    $autoloaderPaths = [
+        __DIR__ . '/../../vendor/autoload.php',
+        __DIR__ . '/../../../vendor/autoload.php', 
+        __DIR__ . '/../../../../vendor/autoload.php',
+    ];
+    
+    $autoloaderLoaded = false;
+    foreach ($autoloaderPaths as $autoloaderPath) {
+        if (file_exists($autoloaderPath)) {
+            require_once $autoloaderPath;
+            $autoloaderLoaded = true;
+            break;
+        }
+    }
+    
+    // If no Composer autoloader found, load PHPMailer classes directly
+    if (!$autoloaderLoaded) {
+        require_once __DIR__ . '/PHPMailer/Exception.php';
+        require_once __DIR__ . '/PHPMailer/PHPMailer.php';
+        require_once __DIR__ . '/PHPMailer/SMTP.php';
     }
 }
 
-// If no Composer autoloader found, load PHPMailer classes directly
-if (!$autoloaderLoaded) {
-    require_once __DIR__ . '/PHPMailer/Exception.php';
-    require_once __DIR__ . '/PHPMailer/PHPMailer.php';
-    require_once __DIR__ . '/PHPMailer/SMTP.php';
-}
-
-// Load environment variables if Composer autoloader was loaded
-if ($autoloaderLoaded && class_exists('Dotenv\Dotenv')) {
+// Load environment variables if Dotenv class is available
+if (class_exists('Dotenv\Dotenv')) {
     
     // Try different paths for .env file
     $envPaths = [
