@@ -6,6 +6,29 @@
  * and sends emails using the Auto Acoustics mail server.
  */
 
+// First, load Composer autoloader if available
+$autoloaderPaths = [
+    __DIR__ . '/../../vendor/autoload.php',  // Standard Composer location
+    __DIR__ . '/../../../vendor/autoload.php', // Alternative location
+    __DIR__ . '/../../../../vendor/autoload.php', // Root level
+];
+
+$autoloaderLoaded = false;
+foreach ($autoloaderPaths as $autoloaderPath) {
+    if (file_exists($autoloaderPath)) {
+        require_once $autoloaderPath;
+        $autoloaderLoaded = true;
+        break;
+    }
+}
+
+// If no Composer autoloader found, load PHPMailer classes directly
+if (!$autoloaderLoaded) {
+    require_once __DIR__ . '/PHPMailer/Exception.php';
+    require_once __DIR__ . '/PHPMailer/PHPMailer.php';
+    require_once __DIR__ . '/PHPMailer/SMTP.php';
+}
+
 // Include the AA mail sender
 require_once __DIR__ . '/aa-mail-sender.php';
 
